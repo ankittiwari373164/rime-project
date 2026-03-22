@@ -1,14 +1,34 @@
 import express from "express";
-import { createCourse, getCourses } from "../controllers/courseControllers.js";
-import authMiddleware from "../middleware/auth.js";
-import authorizeRoles from "../middleware/role.js";
+import { getCourses } from "../controllers/courseControllers.js";
 
-const courseRoute = express.Router();
+const router = express.Router();
 
-// Only admins can create courses
-courseRoute.post("/", authMiddleware, authorizeRoles("admin"), createCourse);
+router.get("/", getCourses);
 
-// Anyone can view courses
-courseRoute.get("/", getCourses);
+export default router;
 
-export default courseRoute;
+
+
+
+
+
+
+
+
+// import express from "express";
+// import { createCourse, getCourses } from "../controllers/courseControllers.js";
+// import authMiddleware from "../middleware/authMiddleware.js";
+// import authorizeRoles from "../middleware/role.js";
+
+// const courseRoute = express.Router();
+
+// // Only admins can create courses
+// courseRoute.post("/", authMiddleware, authorizeRoles("admin"), createCourse);
+
+// // Anyone can view courses
+// courseRoute.get("/", getCourses);
+
+
+// export default courseRoute;
+
+

@@ -1,5 +1,5 @@
 import express from "express";
-import { createApplication, getApplications } from "../controllers/applicationControllers.js";
+import { createApplication, getApplications , deleteApplication, updateApplication } from "../controllers/applicationControllers.js";
 
 const applicationRoute = express.Router();
 
@@ -15,4 +15,6 @@ applicationRoute.get(
   getApplications
 );
 
+applicationRoute.delete("/:id", deleteApplication);
+applicationRoute.put("/:id", updateApplication);
 export default applicationRoute;

@@ -10,9 +10,9 @@ import feeRoute from "./src/routes/feeRoute.js";
 import enquiryRoute from "./src/routes/enquiryRoute.js";
 import contactRoute from "./src/routes/contactRoute.js";
 import applicationRoute from "./src/routes/applicationRoute.js";
-
+import adminRoutes from "./src/routes/adminRoutes.js";
 const app= express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT; 
 
 connectDB();
 
@@ -27,7 +27,7 @@ app.use("/api/course/fee", feeRoute);
 app.use("/api/enquiry", enquiryRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/apply", applicationRoute);
-
+app.use("/api/admin" , adminRoutes)
 app.get("/", (req,res)=>{
     res.send("Welcome to RIME Server...");
 })
