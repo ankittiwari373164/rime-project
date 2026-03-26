@@ -13,40 +13,18 @@ import applicationRoute from "./src/routes/applicationRoute.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import cookieParser from "cookie-parser";
-const app = express();
-const PORT = process.env.PORT;
+const app= express();
+const PORT = process.env.PORT; 
 
 connectDB();
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://rime.co.in");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  next();
-});
-
-// ✅ CORS sabse pehle
-app.use(cors({
-  origin: "https://rime.co.in",
-  credentials: true
-}));
-
-// app.options("*", cors());
-
-// ✅ body & cookies
-app.use(express.json());
 app.use(cookieParser());
-
-// ✅ proxy (Vercel ke liye)
-app.set("trust proxy", 1);
-
-
+// // Middleware
+// app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:5173", "https://rime.co.in"], 
+    credentials: true
+}));
+app.use(express.json());
 
 // // Routes
 app.use("/api/courses", courseRoute); 
