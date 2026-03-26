@@ -1,7 +1,5 @@
 import express from "express";
-import jwt from "jsonwebtoken";
-import Admin from "../models/adminModel.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 import {
   getApplications,
@@ -17,49 +15,35 @@ import {
 
 const router = express.Router();
 
-// 🔐 Admin Login
-router.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// =========================
+// 📄 APPLICATION ROUTES
+// =========================
 
-    const admin = await Admin.findOne({ email });
-    if (!admin) {
-      return res.status(400).json({ message: "Invalid email" });
-    }
+// Get all applications
+router.get("/applications", protect, adminOnly, getApplications);
 
-    const isMatch = await admin.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid password" });
-    }
+// Delete application
+router.delete("/applications/:id", protect, adminOnly, deleteApplication);
 
-    const token = jwt.sign(
-      { id: admin._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+// Update application
+router.put("/applications/:id", protect, adminOnly, updateApplication);
 
-    res.json({ success: true, token });
 
-  } catch (err) {
-    res.status(500).json({ error: "Login error" });
-  }
-});
+// =========================
+// 🎓 COURSE ROUTES
+// =========================
 
-// ✅ Application Routes
-router.get("/applications", authMiddleware, getApplications);
-router.delete("/application/:id", authMiddleware, deleteApplication);
-router.put("/application/:id", authMiddleware, updateApplication);
+// Create course
+router.post("/courses", protect, adminOnly, createCourse);
 
-// ✅ Course Routes (FIXED)
-router.post("/courses", authMiddleware, createCourse);
-router.put("/courses/:id", authMiddleware, updateCourse);
-router.delete("/courses/:id", authMiddleware, deleteCourse);
+// Update course
+router.put("/courses/:id", protect, adminOnly, updateCourse);
+
+// Delete course
+router.delete("/courses/:id", protect, adminOnly, deleteCourse);
+
 
 export default router;
-
-
-
-
 // import express from "express";
 // import Admin from "../models/adminModel.js";
 

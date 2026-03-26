@@ -1,4 +1,5 @@
 import Application from "../models/applicationModel.js";
+import mongoose from "mongoose";
 
 // ✅ Create Application
 export const createApplication = async (req, res) => {
@@ -13,12 +14,28 @@ export const createApplication = async (req, res) => {
       });
     }
 
-    // 🔥 IMPORTANT: course should be ObjectId now
+    // 🔴 ObjectId check
+    if (!mongoose.Types.ObjectId.isValid(course)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid course ID",
+      });
+    }
+
+    // 🔴 Duplicate email check (optional but good)
+    const existing = await Application.findOne({ email });
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "Application already submitted with this email",
+      });
+    }
+
     const application = await Application.create({
       fullName,
       email,
       phone,
-      course, // now expects Course _id
+      course,
       gender,
       address,
     });
@@ -42,7 +59,7 @@ export const createApplication = async (req, res) => {
 export const getApplications = async (req, res) => {
   try {
     const applications = await Application.find()
-      .populate("course") // 🔥 THIS IS MAIN CHANGE
+      .populate("course")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -89,11 +106,18 @@ export const deleteApplication = async (req, res) => {
 // ✅ Update Application
 export const updateApplication = async (req, res) => {
   try {
+    const allowedFields = ["fullName", "email", "phone", "course", "gender", "address"];
+
+    const updates = {};
+    for (let key of allowedFields) {
+      if (req.body[key]) updates[key] = req.body[key];
+    }
+
     const updated = await Application.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       { new: true }
-    ).populate("course"); // 🔥 also populate after update
+    ).populate("course");
 
     if (!updated) {
       return res.status(404).json({
@@ -116,7 +140,6 @@ export const updateApplication = async (req, res) => {
     });
   }
 };
-
 
 
 
