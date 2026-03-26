@@ -15,14 +15,16 @@ import authRoutes from "./src/routes/authRoutes.js";
 import cookieParser from "cookie-parser";
 const app= express();
 const PORT = process.env.PORT; 
-
+app.set("trust proxy", 1);
 connectDB();
 app.use(cookieParser());
 // // Middleware
 // app.use(cors());
 app.use(cors({
-    origin: ["https://rime.co.in"], 
-    credentials: true
+  origin: "https://rime.co.in", 
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 

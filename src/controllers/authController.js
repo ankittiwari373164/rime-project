@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 // 🔐 Generate JWT Token
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
-    expiresIn: "7d"
+    expiresIn: "7d",
   });
 };
 
@@ -18,14 +18,14 @@ export const registerUser = async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required"
+        message: "All fields are required",
       });
     }
 
     if (password.length < 6) {
       return res.status(400).json({
         success: false,
-        message: "Password must be at least 6 characters"
+        message: "Password must be at least 6 characters",
       });
     }
 
@@ -34,7 +34,7 @@ export const registerUser = async (req, res) => {
     if (userExists) {
       return res.status(400).json({
         success: false,
-        message: "User already exists"
+        message: "User already exists",
       });
     }
 
@@ -46,7 +46,7 @@ export const registerUser = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: "user" // default role
+      role: "user", // default role
     });
 
     res.status(201).json({
@@ -56,14 +56,13 @@ export const registerUser = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -77,7 +76,7 @@ export const loginUser = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required"
+        message: "Email and password are required",
       });
     }
 
@@ -86,7 +85,7 @@ export const loginUser = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Invalid credentials"
+        message: "Invalid credentials",
       });
     }
 
@@ -95,7 +94,7 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        message: "Invalid credentials"
+        message: "Invalid credentials",
       });
     }
 
@@ -105,9 +104,10 @@ export const loginUser = async (req, res) => {
     // 🍪 Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // production me true and development me false
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      secure: true, // 👈 HTTPS ke liye must
+      sameSite: "none", // 👈 Cross-domain ke liye must
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/", // 👈 Ye zaroori hai taaki poori site par cookie chale
     });
 
     res.json({
@@ -116,14 +116,13 @@ export const loginUser = async (req, res) => {
       user: {
         id: user._id,
         username: user.username,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -133,7 +132,7 @@ export const logoutUser = (req, res) => {
   res.clearCookie("token");
   res.json({
     success: true,
-    message: "Logged out successfully"
+    message: "Logged out successfully",
   });
 };
 
@@ -141,6 +140,6 @@ export const logoutUser = (req, res) => {
 export const getMe = (req, res) => {
   res.json({
     success: true,
-    user: req.user
+    user: req.user,
   });
 };
