@@ -20,10 +20,12 @@ connectDB();
 app.use(cookieParser());
 // // Middleware
 // app.use(cors());
+
 app.use(cors({
     origin: ["http://localhost:5173", "https://rime.co.in"], 
     credentials: true
 }));
+
 app.use(express.json());
 
 // // Routes
