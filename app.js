@@ -28,6 +28,28 @@ app.use(cors({
 
 app.use(express.json());
 
+// Sitemap route
+app.get('/sitemap.xml', (req, res) => {
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://rime.co.in/</loc><lastmod>2026-04-11</lastmod><priority>1.0</priority></url>
+  <url><loc>https://rime.co.in/programs</loc><lastmod>2026-04-11</lastmod><priority>0.9</priority></url>
+  <url><loc>https://rime.co.in/admissions</loc><lastmod>2026-04-11</lastmod><priority>0.9</priority></url>
+  <url><loc>https://rime.co.in/about</loc><lastmod>2026-04-11</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rime.co.in/apply</loc><lastmod>2026-04-11</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rime.co.in/contact</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rime.co.in/gallery</loc><lastmod>2026-04-11</lastmod><priority>0.6</priority></url>
+  <url><loc>https://rime.co.in/facilities/labs</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rime.co.in/facilities/library</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rime.co.in/facilities/playground</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rime.co.in/facilities/swimming-pool</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rime.co.in/facilities/seminar-halls</loc><lastmod>2026-04-11</lastmod><priority>0.7</priority></url>
+</urlset>`;
+  res.setHeader('Content-Type', 'application/xml');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.status(200).send(sitemap);
+});
+
 // // Routes
 app.use("/api/courses", courseRoute); 
 app.use("/api/reviews", reviewRoute);
