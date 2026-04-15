@@ -22,7 +22,7 @@ app.use(cookieParser());
 // app.use(cors());
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://rime.co.in"], 
+    origin: ["http://localhost:5173", "https://rime.co.in" ,  "https://www.rime.co.in"], 
     credentials: true
 }));
 
