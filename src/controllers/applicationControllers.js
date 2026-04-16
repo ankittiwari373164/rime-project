@@ -1,7 +1,7 @@
 import Application from "../models/applicationModel.js";
 import mongoose from "mongoose";
 
-// ✅ Create Application
+// ✅ Create Application & Send to Google Sheets
 export const createApplication = async (req, res) => {
   try {
     const { fullName, email, phone, course, gender, address } = req.body;
@@ -22,7 +22,7 @@ export const createApplication = async (req, res) => {
       });
     }
 
-    // 🔴 Duplicate email check (optional but good)
+    // 🔴 Duplicate email check
     const existing = await Application.findOne({ email });
     if (existing) {
       return res.status(400).json({
@@ -31,6 +31,7 @@ export const createApplication = async (req, res) => {
       });
     }
 
+    // 1. Save to MongoDB
     const application = await Application.create({
       fullName,
       email,
@@ -40,6 +41,27 @@ export const createApplication = async (req, res) => {
       address,
     });
 
+    // 2. Fetch the populated application to get Course Title for Google Sheets
+    const populatedApp = await Application.findById(application._id).populate("course");
+
+    // 3. 🔥 Forward to Google Sheets (Silent Background Request)
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxm2cQl_q2DC4oYMuJ4TzzdJfKjRrX3I8fsVa5MzIdzvmpQlaWzLOV0rWmmTo00a-pF_w/exec";
+
+    fetch(GOOGLE_SHEET_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName,
+        email,
+        phone,
+        course: populatedApp.course ? populatedApp.course.title : "Unknown Course",
+        gender,
+        address,
+        appliedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+      }),
+    }).catch((err) => console.error("Google Sheet Error:", err));
+
+    // 4. Send Immediate Success Response
     res.status(201).json({
       success: true,
       message: "Application submitted successfully",
