@@ -19,34 +19,37 @@ const PORT = process.env.PORT;
 connectDB();
 app.use(cookieParser());
 // // Middleware
-// app.use(cors());
+app.use(cors({
+    origin: true, // Ye automatically aane waale origin ko allow kar deta hai
+    credentials: true
+}));
 
 // app.use(cors({
 //     origin: ["http://localhost:5173", "https://rime.co.in" ,  "https://www.rime.co.in"], 
 //     credentials: true
 // }));
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://rime.co.in",
-  "https://www.rime.co.in"
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "https://rime.co.in",
+//   "https://www.rime.co.in"
+// ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    console.log("Origin:", origin);
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     console.log("Origin:", origin);
 
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
+//     // allow requests with no origin (like Postman)
+//     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("CORS blocked: " + origin));
-    }
-  },
-  credentials: true
-}));
+//     if (allowedOrigins.includes(origin)) {
+//       return callback(null, true);
+//     } else {
+//       return callback(new Error("CORS blocked: " + origin));
+//     }
+//   },
+//   credentials: true
+// }));
 
 app.use(express.json());
 
