@@ -45,7 +45,7 @@ export const createApplication = async (req, res) => {
     const populatedApp = await Application.findById(application._id).populate("course");
 
     // 3. 🔥 Forward to Google Sheets (Silent Background Request)
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxm2cQl_q2DC4oYMuJ4TzzdJfKjRrX3I8fsVa5MzIdzvmpQlaWzLOV0rWmmTo00a-pF_w/exec";
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyxxZVs6YBVUulrppQ8O96zJ7LkFqpb_gp7uoabzwRTJ6zVhbYAnC20KE8PF__nwAOC/exec";
 
     fetch(GOOGLE_SHEET_URL, {
       method: "POST",
