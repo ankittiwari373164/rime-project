@@ -34,22 +34,23 @@ const allowedOrigins = [
   "https://rime.co.in",
   "https://www.rime.co.in"
 ];
-
 app.use(cors({
   origin: function (origin, callback) {
-    console.log("Origin:", origin);
-
-    // allow requests with no origin (like Postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
-      return callback(new Error("CORS blocked: " + origin));
+      return callback(new Error("CORS blocked"));
     }
   },
   credentials: true
 }));
+
+// Yeh line CORS ke JUST BAAD add karein
+app.use((req, res, next) => {
+  res.header("Vary", "Origin");
+  next();
+});
 
 app.use(express.json());
 
