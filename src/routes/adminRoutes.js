@@ -44,6 +44,23 @@ router.delete("/courses/:id", protect, adminOnly, deleteCourse);
 
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import express from "express";
 // import Admin from "../models/adminModel.js";
 

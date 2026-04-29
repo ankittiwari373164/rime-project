@@ -72,30 +72,6 @@ export const getCourses = async (req, res) => {
   }
 };
 
-// ✅ Get Single Course (optional but useful)
-export const getSingleCourse = async (req, res) => {
-  try {
-    const course = await Course.findById(req.params.id).populate("college");
-
-    if (!course) {
-      return res.status(404).json({
-        success: false,
-        message: "Course not found"
-      });
-    }
-
-    res.json({
-      success: true,
-      data: course
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
 
 // ✅ Update Course (Admin)
 export const updateCourse = async (req, res) => {
@@ -195,5 +171,32 @@ export const deleteCourse = async (req, res) => {
 //     res.json(courses);
 //   } catch (err) {
 //     res.status(500).json({ error: err.message });
+//   }
+// };
+
+
+
+// ✅ Get Single Course (optional but useful)
+// export const getSingleCourse = async (req, res) => {
+//   try {
+//     const course = await Course.findById(req.params.id).populate("college");
+
+//     if (!course) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Course not found"
+//       });
+//     }
+
+//     res.json({
+//       success: true,
+//       data: course
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
 //   }
 // };
